@@ -28,7 +28,7 @@ app.post("/tallyhook", async (req, res) =>{
        let responseKey = push(child(ref(database),'responses')).key
        
        await set(ref(database,"responses/" + responseKey), 
-        simplify(content)
+        content
        )
        console.log("Updated database")
 
