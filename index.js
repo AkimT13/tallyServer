@@ -3,6 +3,8 @@ import { database } from './config.js'
 import {set,ref,push, update,child} from 'firebase/database'
     
 
+
+
 const app = new express()
 app.use(express.json())
 
@@ -16,13 +18,16 @@ const formatData = (data) =>{
 
 }
 
+
+
 app.post("/tallyhook", async (req, res) =>{
     try{
        let content = req.body
-       let responseKey = push(child(ref(database),'respones')).key
 
+       let responseKey = push(child(ref(database),'responses')).key
+       
        await set(ref(database,"responses/" + responseKey), 
-        simplify(content)
+        content
        )
 
     }
