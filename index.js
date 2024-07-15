@@ -21,6 +21,7 @@ const formatData = (data) =>{
 
 
 app.post("/tallyhook", async (req, res) =>{
+    console.log("Trying to update database...")
     try{
        let content = req.body
 
@@ -29,6 +30,7 @@ app.post("/tallyhook", async (req, res) =>{
        await set(ref(database,"responses/" + responseKey), 
         content
        )
+       console.log("Updated database")
 
     }
     catch(err){
