@@ -27,8 +27,7 @@ const teamHandler = async (response, key) => {
     else if(teamChoice==="b85b3d71-75f0-4702-b58b-ceb37d52a56c"){
         console.log("User wants to join team")
         const teamID = response.data.fields[2].value
-        
-
+        console.log(teamID)
         const teamRef = ref(database, "teams/" + teamID)
         const teamDoc = await get(teamRef)
 
