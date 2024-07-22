@@ -9,13 +9,22 @@ const app = new express()
 app.use(express.json())
 
 const formatData = (data) =>{
-    let formatted = {
-        name: null,
-        email: null,
-        age: null,
-        
-    };
 
+    
+
+}
+
+const teamHandler = async (response, key) => {
+    const teamChoice = response.data.fields[3].value[0]
+    if(teamChoice==="aa876992-5e5c-4de0-bb4a-1e9081543670"){
+        let teamSlots = [];
+        teamSlots.push(key)
+        let teamKey = push(child(ref(database),'teams')).key
+        await set(ref(database,"teams/" + teamKey), teamSlots
+
+    )
+    return
+    }
 }
 
 
@@ -26,6 +35,8 @@ app.post("/tallyhook", async (req, res) =>{
        let content = req.body
 
        let responseKey = push(child(ref(database),'responses')).key
+
+       teamHandler(content,responseKey)
        
        await set(ref(database,"responses/" + responseKey), 
         content
