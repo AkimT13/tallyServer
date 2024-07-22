@@ -30,9 +30,11 @@ const teamHandler = async (response, key) => {
         console.log(teamID)
         const teamRef = ref(database, "teams/" + teamID)
         const teamDoc = await get(teamRef)
+        console.log(teamDoc.val())
 
         try{
              let teamSlots = teamDoc.val();
+             console.
 
               teamSlots.push(key)
               await update(teamDoc, teamSlots)
