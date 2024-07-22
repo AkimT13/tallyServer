@@ -34,10 +34,8 @@ const teamHandler = async (response, key) => {
 
         try{
              let teamSlots = teamDoc.val();
-             
-
               teamSlots.push(key)
-              await update(teamDoc, teamSlots)
+              await update(teamDoc, {teamSlots})
         }
         catch(err){
             console.log("Team doesnt exist")
