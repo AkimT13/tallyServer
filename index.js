@@ -34,7 +34,7 @@ const teamHandler = async (response, key) => {
 
         try{
              let teamSlots = teamDoc.val();
-             console.
+             
 
               teamSlots.push(key)
               await update(teamDoc, teamSlots)
