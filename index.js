@@ -25,17 +25,20 @@ const teamHandler = async (response, key) => {
     )
     }
     else if(teamChoice==="b85b3d71-75f0-4702-b58b-ceb37d52a56c"){
+        console.log("User wants to join team")
         const teamID = response.data.fields[2].value
+        
 
         const teamRef = ref(database, "teams/" + teamID)
         const teamDoc = await get(teamRef)
 
         if(teamRef.exists()){
+            console.log("Team ID exists")
             let teamSlots = teamRef.val();
             teamSlots.push(key)
             await update(teamDoc, teamSlots)
         }
-        
+
         
         
     }
@@ -56,7 +59,9 @@ app.post("/tallyhook", async (req, res) =>{
        await set(ref(database,"responses/" + responseKey), 
         content
        )
-       console.log("Updated database")
+       
+
+       res.status(200).send("Updated database")
 
     }
     catch(err){
