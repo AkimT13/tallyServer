@@ -33,7 +33,8 @@ const teamHandler = async (response, key) => {
         const teamDoc = await get(teamRef)
 
         try{
-             let teamSlots = teamRef.val();
+             let teamSlots = teamDoc.val();
+
               teamSlots.push(key)
               await update(teamDoc, teamSlots)
         }
