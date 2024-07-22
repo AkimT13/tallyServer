@@ -16,6 +16,7 @@ const formatData = (data) =>{
 
 const teamHandler = async (response, key) => {
     const teamChoice = response.data.fields[3].value[0]
+    const userEmail = response.data.fields[1].value
     if(teamChoice==="aa876992-5e5c-4de0-bb4a-1e9081543670"){
         let teamSlots = [];
         teamSlots.push(key)
@@ -25,7 +26,7 @@ const teamHandler = async (response, key) => {
     )
     }
    else if (teamChoice === "b85b3d71-75f0-4702-b58b-ceb37d52a56c") {
-    // Join an existing team
+    
     console.log("User wants to join team");
     const teamID = response.data.fields[2].value;
     console.log(teamID);
