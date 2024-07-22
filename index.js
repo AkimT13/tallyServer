@@ -32,15 +32,15 @@ const teamHandler = async (response, key) => {
         const teamRef = ref(database, "teams/" + teamID)
         const teamDoc = await get(teamRef)
 
-        if(teamRef.exists()){
-            console.log("Team ID exists")
-            let teamSlots = teamRef.val();
-            teamSlots.push(key)
-            await update(teamDoc, teamSlots)
+        try{
+             let teamSlots = teamRef.val();
+              teamSlots.push(key)
+              await update(teamDoc, teamSlots)
         }
+        catch(err){
+            console.log("Team doesnt exist")
 
-        
-        
+        }
     }
     return
 }
