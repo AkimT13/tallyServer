@@ -23,8 +23,23 @@ const teamHandler = async (response, key) => {
         await set(ref(database,"teams/" + teamKey), teamSlots
 
     )
-    return
     }
+    else if(teamChoice==="b85b3d71-75f0-4702-b58b-ceb37d52a56c"){
+        const teamID = response.data.fields[2].value
+
+        const teamRef = ref(database, "teams/" + teamID)
+        const teamDoc = await get(teamRef)
+
+        if(teamRef.exists()){
+            let teamSlots = teamRef.val();
+            teamSlots.push(key)
+            await update(teamDoc, teamSlots)
+        }
+        
+        
+        
+    }
+    return
 }
 
 
