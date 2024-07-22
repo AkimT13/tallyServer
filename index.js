@@ -36,7 +36,7 @@ const teamHandler = async (response, key) => {
       if (teamDoc.exists()) {
         let teamSlots = teamDoc.val() || [];
         teamSlots.push(key);
-        await update(teamRef, {teamSlots});
+        await set(teamRef, teamSlots);
       } else {
         console.log("Team doesn't exist");
       }
