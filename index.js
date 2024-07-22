@@ -24,24 +24,26 @@ const teamHandler = async (response, key) => {
 
     )
     }
-    else if(teamChoice==="b85b3d71-75f0-4702-b58b-ceb37d52a56c"){
-        console.log("User wants to join team")
-        const teamID = response.data.fields[2].value
-        console.log(teamID)
-        const teamRef = ref(database, "teams/" + teamID)
-        const teamDoc = await get(teamRef)
-        console.log(teamDoc.val())
+   else if (teamChoice === "b85b3d71-75f0-4702-b58b-ceb37d52a56c") {
+    // Join an existing team
+    console.log("User wants to join team");
+    const teamID = response.data.fields[2].value;
+    console.log(teamID);
+    const teamRef = ref(database, "teams/" + teamID);
 
-        try{
-             let teamSlots = teamDoc.val();
-              teamSlots.push(key)
-              await update(teamRef, teamSlots)
-        }
-        catch(err){
-            console.log("Team doesnt exist")
-
-        }
+    try {
+      const teamDoc = await get(teamRef);
+      if (teamDoc.exists()) {
+        let teamSlots = teamDoc.val() || [];
+        teamSlots.push(key);
+        await update(teamRef, teamSlots);
+      } else {
+        console.log("Team doesn't exist");
+      }
+    } catch (err) {
+      console.log("Error fetching or updating team:", err);
     }
+  }
     return
 }
 
