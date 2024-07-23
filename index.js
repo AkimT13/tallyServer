@@ -64,9 +64,9 @@ app.post("/tallyhook", async (req, res) =>{
     console.log("Trying to update database...")
     try{
        let content = req.body
-        console.log(content)
-       content = {...content , accepted : null}
-       content = {...content, inTeam : null}
+       console.log(content)
+       content["accepted"] = null
+       content["isTeam"] = null
        console.log(content)
 
 
