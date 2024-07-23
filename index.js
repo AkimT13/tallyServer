@@ -65,8 +65,8 @@ app.post("/tallyhook", async (req, res) =>{
     try{
        let content = req.body
 
-       content.accepted = null
-       content.inTeam = null
+       content = {...content , accepted : null}
+       content = {...content, inTeam : null}
 
        let responseKey = push(child(ref(database),'responses')).key
 
