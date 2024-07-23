@@ -14,6 +14,8 @@ const formatData = (data) =>{
 
 }
 
+
+
 const teamHandler = async (response, key) => {
     const teamChoice = response.data.fields[3].value[0]
     const userEmail = response.data.fields[1].value
@@ -24,7 +26,9 @@ const teamHandler = async (response, key) => {
         let teamKey = push(child(ref(database),'teams')).key
         await set(ref(database,"teams/" + teamKey), teamSlots
 
+
     )
+
     }
     // join team with team id
    else if (teamChoice === "b85b3d71-75f0-4702-b58b-ceb37d52a56c") {
@@ -45,10 +49,14 @@ const teamHandler = async (response, key) => {
       }
     } catch (err) {
       console.log("Error fetching or updating team:", err);
+
     }
+
   }
-    return
+    
 }
+
+
 
 
 
@@ -57,9 +65,13 @@ app.post("/tallyhook", async (req, res) =>{
     try{
        let content = req.body
 
+       content.accepted = null
+       content.inTeam = null
+
        let responseKey = push(child(ref(database),'responses')).key
 
        teamHandler(content,responseKey)
+
        
        await set(ref(database,"responses/" + responseKey), 
         content
