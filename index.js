@@ -50,6 +50,9 @@ const teamHandler = async (response, key) => {
         // TODO Send email confirming email has been sent. 
         var textString = `No team has been found with ${teamKey}.`
         sendEmail(userEmail, "First name", "The team you tried joining does not exist", textString)
+
+
+        // There needs to be a system to handle errors 
       }
     } catch (err) {
       console.log("Error fetching or updating team:", err);

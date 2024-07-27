@@ -24,7 +24,7 @@ export async function sendEmail(receipientEmail, fName, subject, textString ) {
         to: receipient,
         subject: subject,
         text: textString
-        // html: htmlString, // TODO make custom HTML template for each message
+        // html: htmlString, // TODO make custom HTML template for each message. It's not neccessary for right now but at some point we should be sending formatted emails for professionalism. 
   
       };
   
