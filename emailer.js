@@ -7,7 +7,7 @@ export async function sendEmail(receipientEmail, fName, subject, textString ) {
   
       //Authentication for our sending email.
       const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
+        host: "mail.privateemail.com",
         port: 465,
         secure: true,
         auth: {
