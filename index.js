@@ -11,6 +11,7 @@ const formatData = (data) => {};
 const teamHandler = async (response, key) => {
   const teamChoice = response.data.fields[3].value[0];
   const userEmail = response.data.fields[1].value;
+  console.log(userEmail)
   //create team and email team id
   if (teamChoice === "aa876992-5e5c-4de0-bb4a-1e9081543670") {
     let teamSlots = [];
