@@ -63,6 +63,7 @@ const teamHandler = async (response, key) => {
 };
 
 app.post("/tallyhook", async (req, res) => {
+
   console.log("Trying to update database...");
   try {
     let content = req.body;
@@ -72,6 +73,7 @@ app.post("/tallyhook", async (req, res) => {
     console.log(content);
 
     let responseKey = push(child(ref(database), "responses")).key;
+    let userEmail = content.data.fields[1].value;
 
     // TODO Send email confirming data has been saved. 
 
