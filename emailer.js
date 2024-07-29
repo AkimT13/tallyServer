@@ -21,7 +21,7 @@ export async function sendEmail(receipientEmail, fName, subject, textString ) {
           name: "SF Hacks Team",
           address: process.env.EMAIL_ACCOUNT,
         },
-        to: receipient,
+        to: receipientEmail,
         subject: subject,
         text: textString
         // html: htmlString, // TODO make custom HTML template for each message. It's not neccessary for right now but at some point we should be sending formatted emails for professionalism. 
