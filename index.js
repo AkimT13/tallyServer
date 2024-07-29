@@ -2,9 +2,11 @@ import express, { response } from "express";
 import { database } from "./config.js";
 import { set, ref, push, update, child, get } from "firebase/database";
 import { sendEmail } from "./emailer.js";
+import bodyParser from "body-parser";
 
 const app = new express();
 app.use(express.json());
+app.use(bodyParser.json({limit:'20mb'}))
 
 const formatData = (data) => {};
 
