@@ -6,7 +6,8 @@ import bodyParser from "body-parser";
 
 const app = new express();
 app.use(express.json());
-app.use(bodyParser.json({limit:'100mb'}))
+app.use(bodyParser.json({limit:'200mb'}))
+app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
 
 const formatData = (data) => {};
 
