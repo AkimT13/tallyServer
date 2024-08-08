@@ -11,11 +11,11 @@ app.use(express.json({limit:'10mb'}));
 const formatData = (data) => {};
 
 const teamHandler = async (response, key) => {
-  const teamChoice = response.data.fields[3].value[0];
-  const userEmail = response.data.fields[1].value;
+  const teamChoice = response.data.fields[33].value[0];
+  const userEmail = response.data.fields[8].value;
   console.log(userEmail)
   //create team and email team id
-  if (teamChoice === "aa876992-5e5c-4de0-bb4a-1e9081543670") {
+  if (teamChoice === "1a2071c6-bc0a-4a17-8b36-9d2f8e11a6d4") {
     let teamSlots = [];
     teamSlots.push(key);
     let teamKey = push(child(ref(database), "teams")).key;
@@ -30,9 +30,9 @@ const teamHandler = async (response, key) => {
   }
 
   // join team with team id
-  else if (teamChoice === "b85b3d71-75f0-4702-b58b-ceb37d52a56c") {
+  else if (teamChoice === "cf5063f4-ff1b-4c7a-99e2-0c327971c932") {
     console.log("User wants to join team");
-    const teamID = response.data.fields[2].value;
+    const teamID = response.data.fields[34].value;
     console.log(teamID);
     const teamRef = ref(database, "teams/" + teamID);
     
