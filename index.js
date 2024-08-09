@@ -12,7 +12,7 @@ const formatData = (data) => {};
 
 const teamHandler = async (response, key) => {
   const teamChoice = response.data.fields[33].value[0];
-  const userEmail = response.data.fields[8].value;
+  const userEmail = response.data.fields[7].value;
   console.log(userEmail)
   //create team and email team id
   if (teamChoice === "1a2071c6-bc0a-4a17-8b36-9d2f8e11a6d4") {
