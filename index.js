@@ -76,9 +76,10 @@ app.post("/tallyhook", async (req, res) => {
     content["isTeam"] = false;
     console.log(content);
 
+
     let responseKey = push(child(ref(database), "responses")).key;
     let userEmail = content.data.fields[1].value;
-    
+
 
     // TODO Send email confirming data has been saved. 
 
@@ -104,6 +105,17 @@ app.post('/rawJSONView', async (req,res)=>{
     try{
 
    let content = req.body
+   
+   if (Array.isArray(content.data?.fields)) {
+    // Set 'options' to null at specific indices
+    if (content.data.fields[10]) {
+        content.data.fields[10].options = null;
+    }
+    if (content.data.fields[11]) {
+        content.data.fields[11].options = null;
+    }
+}
+
 
    let responseKey = push(child(ref(database),"responses")).key
 
@@ -115,6 +127,7 @@ app.post('/rawJSONView', async (req,res)=>{
     catch{
         console.log('error updating database')
     }
+
     
 })
 
