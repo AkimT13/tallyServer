@@ -1,7 +1,7 @@
 import express, { response } from "express";
 import { database } from "./config.js";
 import { set, ref, push, update, child, get } from "firebase/database";
-import { sendEmail } from "./emailer.js";
+import { sendEmailHtml } from "./emailer.js";
 import bodyParser from "body-parser";
 
 const app = new express();
@@ -11,12 +11,13 @@ app.use(express.json({limit:'10mb'}));
 const formatData = (data) => {};
 
 const teamHandler = async (response, key) => {
-  const teamChoice = response.data.fields[33].value[0];
+  const teamChoice = response.data.fields[31].value[0];
   const userEmail = response.data.fields[7].value;
+  const userName = response.data.fields[4].value;
   
   console.log(userEmail)
   //create team and email team id
-  if (teamChoice === "1a2071c6-bc0a-4a17-8b36-9d2f8e11a6d4") {
+  if (teamChoice === "56968301-3579-49bc-a217-238b0bff8dc7") {
     let teamSlots = [];
     teamSlots.push(key);
     let teamKey = push(child(ref(database), "teams")).key;
@@ -24,14 +25,14 @@ const teamHandler = async (response, key) => {
     
 
     // TODO Send email with team ID.
-    var textString = `Your team key is:\n${teamKey}\nSend this key to your other teammates so they can join your team.`
+    emailData.teamCode = teamKey
     
 
-    sendEmail(userEmail, "First name", "Your application team code", textString)
+    await sendEmailHtml(userEmail, "Your application team code", "teamTemplate", emailData);
   }
 
   // join team with team id
-  else if (teamChoice === "cf5063f4-ff1b-4c7a-99e2-0c327971c932") {
+  else if (teamChoice === "5ed29545-983a-4bf7-a9e9-6b0a4f992111") {
     console.log("User wants to join team");
     const teamID = response.data.fields[34].value;
     console.log(teamID);
@@ -44,9 +45,9 @@ const teamHandler = async (response, key) => {
         teamSlots.push(key);
         await set(teamRef, teamSlots);
 
-
-        // TODO send user email with team information
-        var textString = `You've joined the following team: ${teamKey}.`
+        emailData.teamCode = teamID;
+        
+        await sendEmailHtml(userEmail, "You've joined a team", "teamJoinTemplate", emailData);
         sendEmail(userEmail, "First name", "You've joined a team", textString)
       } else {
         console.log("Team doesn't exist");
@@ -71,8 +72,8 @@ app.post("/tallyhook", async (req, res) => {
   try {
     let content = req.body;
     console.log(content);
-    content["accepted"] = null;
-    content["isTeam"] = null;
+    content["accepted"] = false;
+    content["isTeam"] = false;
     console.log(content);
 
     let responseKey = push(child(ref(database), "responses")).key;
