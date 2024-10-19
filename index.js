@@ -78,6 +78,7 @@ app.post("/tallyhook", async (req, res) => {
 
     let responseKey = push(child(ref(database), "responses")).key;
     let userEmail = content.data.fields[1].value;
+    
 
     // TODO Send email confirming data has been saved. 
 
@@ -104,7 +105,7 @@ app.post('/rawJSONView', async (req,res)=>{
 
    let content = req.body
 
-    let responseKey = push(child(ref(database),"responses")).key
+   let responseKey = push(child(ref(database),"responses")).key
 
     await set(ref(database , "responses/" + responseKey),content)
     res.status(200).send("Updated database")
