@@ -14,6 +14,10 @@ const teamHandler = async (response, key) => {
   const teamChoice = response.data.fields[33].value[0];
   const userEmail = response.data.fields[7].value;
   const userName = response.data.fields[4].value;
+
+  let emailData = {
+    name: userName
+  };
   
   console.log(userEmail)
   //create team and email team id
@@ -92,10 +96,14 @@ app.post("/tallyhook", async (req, res) => {
 
     let responseKey = push(child(ref(database), "responses")).key;
     let userEmail = content.data.fields[7].value;
+    let userName =  content.data.fields[4].value;
+    let emailData = {
+      name: userName,
+    };
 
 
     // TODO Send email confirming data has been saved. 
-
+    await sendEmailHtml(userEmail, "We've received your application!", "generalConfirmation", emailData);
     await teamHandler(content, responseKey);
 
     await set(ref(database, "responses/" + responseKey), content);
