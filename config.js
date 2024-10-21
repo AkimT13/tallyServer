@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase-admin/app';
 import admin from 'firebase-admin'
 
-import { getDatabase, ref,set } from "firebase/database";
+import { getDatabase, ref,set,remove } from "firebase/database";
 
 import { readFileSync } from 'fs';
 import dotenv from 'dotenv';
@@ -27,6 +27,27 @@ const write = (s, id)=>{
 
 
 }
+
+const clearDb = ()=>{ // if you run this function it will fucking delete everything
+  const responsesRef = ref(database, 'responses');
+  const teamsRef = ref(database, 'teams')
+  remove(responsesRef)
+  .then(() => {
+    console.log('Responses node deleted successfully.');
+  })
+  .catch((error) => {
+    console.error('Error deleting responses node:', error);
+  });
+  remove(teamsRef)
+  .then(() => {
+    console.log('Responses node deleted successfully.');
+  })
+  .catch((error) => {
+    console.error('Error deleting responses node:', error);
+  });
+  
+}
+
 
 
 

@@ -1,7 +1,7 @@
 import express, { response } from "express";
 import { database } from "./config.js";
 import { set, ref, push, update, child, get } from "firebase/database";
-import { sendEmail } from "./emailer.js";
+import { sendEmailHtml } from "./emailer.js";
 import bodyParser from "body-parser";
 
 const app = new express();
@@ -13,6 +13,11 @@ const formatData = (data) => {};
 const teamHandler = async (response, key) => {
   const teamChoice = response.data.fields[33].value[0];
   const userEmail = response.data.fields[7].value;
+  const userName = response.data.fields[4].value;
+
+  let emailData = {
+    name: userName
+  };
   
   console.log(userEmail)
   //create team and email team id
@@ -24,10 +29,11 @@ const teamHandler = async (response, key) => {
     
 
     // TODO Send email with team ID.
-    var textString = `Your team key is:\n${teamKey}\nSend this key to your other teammates so they can join your team.`
+    emailData.teamCode = teamKey
+    response.isTeam = true;
     
 
-    sendEmail(userEmail, "First name", "Your application team code", textString)
+    await sendEmailHtml(userEmail, "Your application team code", "teamTemplate", emailData);
   }
 
   // join team with team id
@@ -44,18 +50,19 @@ const teamHandler = async (response, key) => {
         teamSlots.push(key);
         await set(teamRef, teamSlots);
 
-
-        // TODO send user email with team information
-        var textString = `You've joined the following team: ${teamKey}.`
-        sendEmail(userEmail, "First name", "You've joined a team", textString)
+        emailData.teamCode = teamID;
+        
+        await sendEmailHtml(userEmail, "You've joined a team", "teamJoinTemplate", emailData);
+       
+        response.isTeam = true;
       } else {
         console.log("Team doesn't exist");
 
         // TODO Send email confirming email has been sent. 
         var textString = `No team has been found with ${teamKey}.`
-        sendEmail(userEmail, "First name", "The team you tried joining does not exist", textString)
+        await sendEmailHtml(userEmail, "The team you tried joining does not exist", "teamNotExistTemplate", emailData);
 
-
+        console.log(`Team not found email sent to ${userEmail}`);
         // There needs to be a system to handle errors 
       }
     } catch (err) {
@@ -70,16 +77,33 @@ app.post("/tallyhook", async (req, res) => {
   console.log("Trying to update database...");
   try {
     let content = req.body;
-    console.log(content);
-    content["accepted"] = null;
-    content["isTeam"] = null;
-    console.log(content);
+    console.log("Adding isAccepted, isTeam, and removing list of countries and schools")
+    content["accepted"] = false;
+    content["isTeam"] = false;
+    if (Array.isArray(content.data?.fields)) {
+      // Set 'options' to null at specific indices
+      if (content.data.fields[10]) {
+          content.data.fields[10].options = null;
+      }
+      if (content.data.fields[11]) {
+          content.data.fields[11].options = null;
+      }
+  }
+
+    
+
+
 
     let responseKey = push(child(ref(database), "responses")).key;
-    let userEmail = content.data.fields[1].value;
+    let userEmail = content.data.fields[7].value;
+    let userName =  content.data.fields[4].value;
+    let emailData = {
+      name: userName,
+    };
+
 
     // TODO Send email confirming data has been saved. 
-
+    await sendEmailHtml(userEmail, "We've received your application!", "generalConfirmation", emailData);
     await teamHandler(content, responseKey);
 
     await set(ref(database, "responses/" + responseKey), content);
@@ -88,7 +112,7 @@ app.post("/tallyhook", async (req, res) => {
 
     
     var textString = `We've received your application! We will begin accepting applications shortly.`
-    sendEmail(userEmail, "First name", "We've received your application!", textString)
+    
 
     
   } catch (err) {
@@ -102,8 +126,19 @@ app.post('/rawJSONView', async (req,res)=>{
     try{
 
    let content = req.body
+   
+   if (Array.isArray(content.data?.fields)) {
+    // Set 'options' to null at specific indices
+    if (content.data.fields[10]) {
+        content.data.fields[10].options = null;
+    }
+    if (content.data.fields[11]) {
+        content.data.fields[11].options = null;
+    }
+}
 
-    let responseKey = push(child(ref(database),"responses")).key
+
+   let responseKey = push(child(ref(database),"responses")).key
 
     await set(ref(database , "responses/" + responseKey),content)
     res.status(200).send("Updated database")
@@ -113,6 +148,7 @@ app.post('/rawJSONView', async (req,res)=>{
     catch{
         console.log('error updating database')
     }
+
     
 })
 
