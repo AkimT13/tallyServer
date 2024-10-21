@@ -53,16 +53,16 @@ const teamHandler = async (response, key) => {
         emailData.teamCode = teamID;
         
         await sendEmailHtml(userEmail, "You've joined a team", "teamJoinTemplate", emailData);
-        sendEmail(userEmail, "First name", "You've joined a team", textString)
+       
         response.isTeam = true;
       } else {
         console.log("Team doesn't exist");
 
         // TODO Send email confirming email has been sent. 
         var textString = `No team has been found with ${teamKey}.`
-        sendEmail(userEmail, "First name", "The team you tried joining does not exist", textString)
+        await sendEmailHtml(userEmail, "The team you tried joining does not exist", "teamNotExistTemplate", emailData);
 
-
+        console.log(`Team not found email sent to ${userEmail}`);
         // There needs to be a system to handle errors 
       }
     } catch (err) {
@@ -112,7 +112,7 @@ app.post("/tallyhook", async (req, res) => {
 
     
     var textString = `We've received your application! We will begin accepting applications shortly.`
-    sendEmail(userEmail, "First name", "We've received your application!", textString)
+    
 
     
   } catch (err) {
