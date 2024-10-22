@@ -29,17 +29,6 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
     // Generate the final HTML with injected data
     const htmlToSend = template(data);
 
-    // Get all images from the images folder
-    const imagesDir = path.join("/templates/images");
-    const imageFiles = fs.readdirSync(imagesDir);
-
-    // Attach all images found in the folder, with each getting a unique cid
-    const attachments = imageFiles.map((file, index) => ({
-      filename: file,
-      path: path.join(imagesDir, file), // Correctly set the path
-      cid: `image${index}` // Generate unique cid for each image
-    }));
-
     // The message to be sent
     const mailOptions = {
       from: {
@@ -49,7 +38,27 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       to: recipientEmail,
       subject: subject,
       html: htmlToSend, // Injected HTML with user-specific data
-      attachments: attachments
+      attachments: [{
+        filename: 'logopupleBlue.png',
+        path: __dirname + '/templates/images/logopupleBlue.png',
+        cid: 'sfhackslogo'
+      },
+      {
+        filename: 'discord.png',
+        path: __dirname + '/templates/images/discord.png',
+        cid: 'discordlogo'
+      },
+      {
+        filename: 'instagram.png',
+        path: __dirname + '/templates/images/instagram.png',
+        cid: 'instagramlogo'
+      },
+      {
+        filename: 'solo.png',
+        path: __dirname + '/templates/images/solo.png',
+        cid: 'solologo'
+      }
+      ]
     };
 
     // Send the email
