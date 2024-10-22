@@ -3,8 +3,13 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import Handlebars from "handlebars";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export async function sendEmailHtml(recipientEmail, subject, templateName, data) {
   try {
