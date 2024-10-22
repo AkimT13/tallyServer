@@ -29,6 +29,13 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
     // Generate the final HTML with injected data
     const htmlToSend = template(data);
 
+    // Attach all images found in the folder, and write unique cid for each
+    const attachments = imageFiles.map((file, index) => ({
+      filename: file,
+      path: path.join('/templates/images/', file), // Attach the image file from the folder
+      cid: `image${index}` // Generate unique cid for each image
+    }));
+
     // The message to be sent
     const mailOptions = {
       from: {
@@ -38,12 +45,7 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       to: recipientEmail,
       subject: subject,
       html: htmlToSend, // Injected HTML with user-specific data
-      html: 'Embedded image: <img src="cid:unique@nodemailer.com"/>',
-      attachments: [{
-        filename: 'logopupleBlue.png',
-        path: '/templates/images/logopupleBlue.png',
-        cid: 'unique@nodemailer.com' //same cid value as in the html img src
-      }]
+      attachments: attachments
     };
 
     // Send the email
