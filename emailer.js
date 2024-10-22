@@ -30,7 +30,7 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
     const htmlToSend = template(data);
 
     // Get all images from the images folder
-    const imagesDir = path.join("tallyServer", "/templates/images");
+    const imagesDir = path.join("/templates/images");
     const imageFiles = fs.readdirSync(imagesDir);
 
     // Attach all images found in the folder, with each getting a unique cid
