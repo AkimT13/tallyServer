@@ -29,10 +29,14 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
     // Generate the final HTML with injected data
     const htmlToSend = template(data);
 
-    // Attach all images found in the folder, and write unique cid for each
+    // Get all images from the images folder
+    const imagesDir = path.join(__dirname, "/templates/images"); // Use __dirname here
+    const imageFiles = fs.readdirSync(imagesDir);
+
+    // Attach all images found in the folder, with each getting a unique cid
     const attachments = imageFiles.map((file, index) => ({
       filename: file,
-      path: path.join('/templates/images/', file), // Attach the image file from the folder
+      path: path.join(imagesDir, file), // Correctly set the path
       cid: `image${index}` // Generate unique cid for each image
     }));
 
