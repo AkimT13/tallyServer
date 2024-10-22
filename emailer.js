@@ -38,6 +38,12 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       to: recipientEmail,
       subject: subject,
       html: htmlToSend, // Injected HTML with user-specific data
+      html: 'Embedded image: <img src="cid:unique@nodemailer.com"/>',
+      attachments: [{
+        filename: 'logopupleBlue.png',
+        path: '/templates/images/logopupleBlue.png',
+        cid: 'unique@nodemailer.com' //same cid value as in the html img src
+      }]
     };
 
     // Send the email
