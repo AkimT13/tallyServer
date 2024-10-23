@@ -57,7 +57,7 @@ const teamHandler = async (response, key) => {
         await sendEmailHtml(userEmail, "You've joined a team", "teamJoinTemplate", emailData);
        
         response.isTeam = true;
-        response[teamID] = teamKey;
+        response["teamID"] = teamKey;
       }
       
       
