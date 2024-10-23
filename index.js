@@ -40,9 +40,9 @@ const teamHandler = async (response, key) => {
   // join team with team id
   else if (teamChoice === "cf5063f4-ff1b-4c7a-99e2-0c327971c932") {
     console.log("User wants to join team");
-    const teamID = response.data.fields[34].value;
-    console.log(teamID);
-    const teamRef = ref(database, "teams/" + teamID);
+    const teamKey = response.data.fields[34].value;
+    console.log(teamKey);
+    const teamRef = ref(database, "teams/" + teamKey);
 
     
     try {
@@ -52,12 +52,12 @@ const teamHandler = async (response, key) => {
         teamSlots.push(key);
         await set(teamRef, teamSlots);
 
-        emailData.teamCode = teamID;
+        emailData.teamCode = teamKey;
         
         await sendEmailHtml(userEmail, "You've joined a team", "teamJoinTemplate", emailData);
        
         response.isTeam = true;
-        response[teamID] = teamID;
+        response[teamID] = teamKey;
       }
       
       
