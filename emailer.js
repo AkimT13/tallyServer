@@ -3,8 +3,13 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import Handlebars from "handlebars";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export async function sendEmailHtml(recipientEmail, subject, templateName, data) {
   try {
@@ -37,14 +42,28 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       },
       to: recipientEmail,
       subject: subject,
-      html: htmlToSend,
-      attachments: [
-        {
-          filename: ''
-        }
+      html: htmlToSend, // Injected HTML with user-specific data
+      attachments: [{
+        filename: 'logopupleBlue.png',
+        path: __dirname + '/templates/images/logopupleBlue.png',
+        cid: 'sfhackslogo'
+      },
+      {
+        filename: 'discord.png',
+        path: __dirname + '/templates/images/discord.png',
+        cid: 'discordlogo'
+      },
+      {
+        filename: 'instagram.png',
+        path: __dirname + '/templates/images/instagram.png',
+        cid: 'instagramlogo'
+      },
+      {
+        filename: 'solo.png',
+        path: __dirname + '/templates/images/solo.png',
+        cid: 'solologo'
+      }
       ]
-
-       
     };
 
     // Send the email
