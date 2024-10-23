@@ -37,7 +37,14 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       },
       to: recipientEmail,
       subject: subject,
-      html: htmlToSend, // Injected HTML with user-specific data
+      html: htmlToSend,
+      attachments: [
+        {
+          filename: ''
+        }
+      ]
+
+       
     };
 
     // Send the email

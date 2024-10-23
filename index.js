@@ -31,6 +31,7 @@ const teamHandler = async (response, key) => {
     // TODO Send email with team ID.
     emailData.teamCode = teamKey
     response.isTeam = true;
+    response.teamID = teamKey
     
 
     await sendEmailHtml(userEmail, "Your application team code", "teamTemplate", emailData);
@@ -42,10 +43,11 @@ const teamHandler = async (response, key) => {
     const teamID = response.data.fields[34].value;
     console.log(teamID);
     const teamRef = ref(database, "teams/" + teamID);
+
     
     try {
       const teamDoc = await get(teamRef);
-      if (teamDoc.exists()) {
+      if (teamDoc.exists() && teamDoc.val().length < 5) {
         let teamSlots = teamDoc.val() || [];
         teamSlots.push(key);
         await set(teamRef, teamSlots);
@@ -55,8 +57,12 @@ const teamHandler = async (response, key) => {
         await sendEmailHtml(userEmail, "You've joined a team", "teamJoinTemplate", emailData);
        
         response.isTeam = true;
-      } else {
-        console.log("Team doesn't exist");
+        response[teamID] = teamID;
+      }
+      
+      
+       else {
+        console.log("Team doesn't exist or full");
 
         // TODO Send email confirming email has been sent. 
         var textString = `No team has been found with ${teamKey}.`
