@@ -47,7 +47,7 @@ const teamHandler = async (response, key) => {
     
     try {
       const teamDoc = await get(teamRef);
-      if (teamDoc.exists() && teamDoc.val().length < 5) {
+      if (teamDoc.exists() && teamDoc.val().length < 4) {
         let teamSlots = teamDoc.val() || [];
         teamSlots.push(key);
         await set(teamRef, teamSlots);
