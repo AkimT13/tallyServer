@@ -77,6 +77,10 @@ const teamHandler = async (response, key) => {
       // TODO Send email with error that team has not been joined. 
     }
   }
+  else{ // no team
+    console.log("User wants to join with no team")
+    await sendEmailHtml(userEmail, "We've received your application!", "generalConfirmation", emailData);
+  }
 };
 
 app.post("/tallyhook", async (req, res) => {
@@ -110,7 +114,7 @@ app.post("/tallyhook", async (req, res) => {
 
 
     // TODO Send email confirming data has been saved. 
-    await sendEmailHtml(userEmail, "We've received your application!", "generalConfirmation", emailData);
+    
     await teamHandler(content, responseKey);
 
     await set(ref(database, "responses/" + responseKey), content);

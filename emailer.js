@@ -28,7 +28,8 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
         keySelector: 'default',
         privateKey: process.env.DKIM_PRIVATE_KEY
 
-      }
+      },
+      
     });
 
     // Read the HTML template file from the project folder
