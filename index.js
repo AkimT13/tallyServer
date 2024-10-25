@@ -83,7 +83,7 @@ const teamHandler = async (response, key) => {
   }
 };
 
-app.post("/tallyhook", async (req, res) => {
+app.post("/tallyhook", async (req, res) => { // tally webhook is attached to this route, it will process any incoming forms and store it as well as email handling
 
   console.log("Trying to update database...");
   try {
@@ -132,7 +132,27 @@ app.post("/tallyhook", async (req, res) => {
   }
 });
 
-app.post('/rawJSONView', async (req,res)=>{
+app.post('/modifyApplication', async (req,res)=>{ //route to update team preference or delete application
+
+  try{
+    let content = req.body
+    
+
+    
+
+
+
+  }
+  catch{
+    console.log('Error updating application')
+  }
+
+
+
+
+})
+
+app.post('/rawJSONView', async (req,res)=>{ //replace a tally form with this route if you want to see/store unproccessed JSON data without email functionality
 
     try{
 
