@@ -30,6 +30,7 @@ const teamHandler = async (response, key) => {
 
     // TODO Send email with team ID.
     emailData.teamCode = teamKey
+    emailData.personalCode = key
     response.isTeam = true;
     response.teamID = teamKey
     

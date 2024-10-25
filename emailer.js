@@ -5,6 +5,7 @@ import path from "path";
 import Handlebars from "handlebars";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { createPrivateKey } from "crypto";
 
 dotenv.config();
 
@@ -22,6 +23,12 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
         user: process.env.EMAIL_ACCOUNT,
         pass: process.env.EMAIL_PASSWORD_KEY,
       },
+      dkim: {
+        domainName: 'sfhacks.io',
+        keySelector: 'default',
+        privateKey: process.env.DKIM_PRIVATE_KEY
+
+      }
     });
 
     // Read the HTML template file from the project folder
