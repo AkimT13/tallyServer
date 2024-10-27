@@ -52,8 +52,8 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       subject: subject,
       html: htmlToSend, // Injected HTML with user-specific data
       attachments: [{
-        filename: 'logopupleBlue.png',
-        path: __dirname + '/templates/images/logopupleBlue.png',
+        filename: 'sfhackslogo.png',
+        path: __dirname + '/templates/images/sfhackslogo.png',
         cid: 'sfhackslogo'
       },
       {
