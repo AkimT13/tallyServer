@@ -16,7 +16,8 @@ const teamHandler = async (response, key) => {
   const userName = response.data.fields[4].value;
 
   let emailData = {
-    name: userName
+    name: userName,
+    personalKey: key
   };
   
   console.log(userEmail)
