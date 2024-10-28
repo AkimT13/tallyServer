@@ -51,27 +51,27 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
       to: recipientEmail,
       subject: subject,
       html: htmlToSend, // Injected HTML with user-specific data
-      // attachments: [{
-      //   filename: 'sfhackslogo.png',
-      //   path: __dirname + '/templates/images/sfhackslogo.png',
-      //   cid: 'sfhackslogo'
-      // },
-      // {
-      //   filename: 'discord.png',
-      //   path: __dirname + '/templates/images/discord.png',
-      //   cid: 'discordlogo'
-      // },
-      // {
-      //   filename: 'instagram.png',
-      //   path: __dirname + '/templates/images/instagram.png',
-      //   cid: 'instagramlogo'
-      // },
-      // {
-      //   filename: 'solo.png',
-      //   path: __dirname + '/templates/images/solo.png',
-      //   cid: 'solologo'
-      // }
-      // ]
+      attachments: [{
+        filename: 'sfhackslogo.png',
+        path: __dirname + '/templates/images/sfhackslogo.png',
+        cid: 'sfhackslogo'
+      },
+      {
+        filename: 'discord.png',
+        path: __dirname + '/templates/images/discord.png',
+        cid: 'discordlogo'
+      },
+      {
+        filename: 'instagram.png',
+        path: __dirname + '/templates/images/instagram.png',
+        cid: 'instagramlogo'
+      },
+      {
+        filename: 'solo.png',
+        path: __dirname + '/templates/images/solo.png',
+        cid: 'solologo'
+      }
+      ]
     };
 
     // Send the email
