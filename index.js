@@ -68,7 +68,7 @@ const teamHandler = async (response, key) => {
 
         // TODO Send email confirming email has been sent. 
         var textString = `No team has been found with ${teamKey}.`
-        await sendEmailHtml(userEmail, "The team you tried joining does not exist", "teamNotExist", emailData);
+        await sendEmailHtml(userEmail, "The team you tried joining does not exist or is full", "teamNotExist", emailData);
 
         console.log(`Team not found email sent to ${userEmail}`);
         // There needs to be a system to handle errors 
@@ -217,7 +217,7 @@ app.post('/modifyApplication', async (req, res) => {
       
       // Send new team code email
       emailData.teamCode = newTeamID;
-      await sendEmailHtml(userEmail, "Your new team has been created!", "teamCreateTemplate", emailData);
+      await sendEmailHtml(userEmail, "Your new team has been created!", "teamCreate(Change)", emailData);
     }
 
     res.status(200).send("Team preferences updated successfully.");
