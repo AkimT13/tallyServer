@@ -170,9 +170,9 @@ app.post('/rawJSONView', async (req,res)=>{ //replace a tally form with this rou
 }
 
 
-   let responseKey = push(child(ref(database),"responses")).key
+   let responseKey = push(child(ref(database),"rawData")).key
 
-    await set(ref(database , "responses/" + responseKey),content)
+    await set(ref(database , "rawData/" + responseKey),content)
     res.status(200).send("Updated database")
     
 
