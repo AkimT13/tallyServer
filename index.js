@@ -144,7 +144,6 @@ app.post('/modifyApplication', async (req, res) => {
     if (!userSnapshot.exists()) {
       
       console.log("Invalid personal key: User not found.");
-      return res.send("Error: Invalid personal key or user not found.");
     }
 
     const user = userSnapshot.val();
@@ -181,7 +180,6 @@ app.post('/modifyApplication', async (req, res) => {
       } else {
         await sendEmailHtml(userEmail, "Error joining team", "teamChangeError", emailData);
         console.log("Error joining team");
-        return res.send("Error joining team")
       }
 
     } else if (choice === "ed727858-2c94-41fd-b55e-87e69264b448") { // Leave Team
@@ -197,7 +195,6 @@ app.post('/modifyApplication', async (req, res) => {
       } else {
         
         console.log("User is not part of any team.");
-        return res.send("User is not part of any team.");
       }
 
     } else { // Create My Own Team
