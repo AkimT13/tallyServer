@@ -196,7 +196,7 @@ app.post('/modifyApplication', async (req, res) => {
       } else {
         
 
-        res.send("User is not part of any team.");
+        return res.send("User is not part of any team.");
       }
 
     } else { // Create My Own Team
