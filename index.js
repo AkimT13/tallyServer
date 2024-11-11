@@ -29,7 +29,7 @@ const teamHandler = async (response, key) => {
     await set(ref(database, "teams/" + teamKey), teamSlots);
     
 
-    // TODO Send email with team ID.
+    
     emailData.teamCode = teamKey
     emailData.personalCode = key
     response.isTeam = true;
@@ -180,7 +180,7 @@ app.post('/modifyApplication', async (req, res) => {
 
       } else {
         await sendEmailHtml(userEmail, "Error joining team", "teamChangeError", emailData);
-        res.send("Error joining team")
+        return res.send("Error joining team")
       }
 
     } else if (choice === "ed727858-2c94-41fd-b55e-87e69264b448") { // Leave Team
@@ -194,6 +194,7 @@ app.post('/modifyApplication', async (req, res) => {
         await update(userRef, { isTeam: false, teamID: null });
         await sendEmailHtml(userEmail, "You've left your team", "teamLeave", emailData);
       } else {
+        
 
         res.send("User is not part of any team.");
       }
