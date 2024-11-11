@@ -180,6 +180,7 @@ app.post('/modifyApplication', async (req, res) => {
 
       } else {
         await sendEmailHtml(userEmail, "Error joining team", "teamChangeError", emailData);
+        console.log("Error joining team");
         return res.send("Error joining team")
       }
 
@@ -195,7 +196,7 @@ app.post('/modifyApplication', async (req, res) => {
         await sendEmailHtml(userEmail, "You've left your team", "teamLeave", emailData);
       } else {
         
-
+        console.log("User is not part of any team.");
         return res.send("User is not part of any team.");
       }
 
