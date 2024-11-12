@@ -142,21 +142,67 @@ app.post('/modifyApplication', async (req, res) => {
 
     const userSnapshot = await get(userRef);
     if (!userSnapshot.exists()) {
-      
       console.log("Invalid personal key: User not found.");
-    }
+    } else {
+      const user = userSnapshot.val();
+      const userEmail = user.data.fields[7].value;
+      let emailData = { name: user.data.fields[4].value };
 
-    const user = userSnapshot.val();
-    const userEmail = user.data.fields[7].value;
-    let emailData = { name: user.data.fields[4].value };
+      if (choice === "71da61d4-5eb5-46e9-8e46-f17ee72e264f") { // Join Team
+        const targetTeamID = content.data.fields[2].value;
 
-    if (choice === "71da61d4-5eb5-46e9-8e46-f17ee72e264f") { // Join Team
-      const targetTeamID = content.data.fields[2].value;
-      const targetTeamRef = ref(database, "teams/" + targetTeamID);
-      
-      const teamSnapshot = await get(targetTeamRef);
-      if (teamSnapshot.exists() && teamSnapshot.val().length < 4) {
-        // Remove from old team if they have one
+        if (user.isTeam && user.teamID === targetTeamID) {
+          // User is already in the target team
+          await sendEmailHtml(userEmail, "You've successfully joined a new team!", "teamJoin(Change)", emailData);
+          console.log("User is already in the target team.");
+        } else {
+          const targetTeamRef = ref(database, "teams/" + targetTeamID);
+          const teamSnapshot = await get(targetTeamRef);
+          
+          if (teamSnapshot.exists() && teamSnapshot.val().length < 4) {
+            // Remove from old team if they have one
+            if (user.isTeam) {
+              const oldTeamRef = ref(database, "teams/" + user.teamID);
+              const oldTeamSnapshot = await get(oldTeamRef);
+              let oldTeamMembers = oldTeamSnapshot.val() || [];
+              oldTeamMembers = oldTeamMembers.filter(id => id !== personalKey);
+              await set(oldTeamRef, oldTeamMembers);
+            }
+
+            // Add to new team
+            let teamMembers = teamSnapshot.val() || [];
+            teamMembers.push(personalKey);
+            await set(targetTeamRef, teamMembers);
+
+            // Update user data
+            await update(userRef, { isTeam: true, teamID: targetTeamID });
+            
+            // Confirmation email
+            emailData.teamCode = targetTeamID;
+            await sendEmailHtml(userEmail, "You've successfully joined a new team!", "teamJoin(Change)", emailData);
+
+          } else {
+            await sendEmailHtml(userEmail, "Error joining team", "teamChangeError", emailData);
+            console.log("Error joining team");
+          }
+        }
+
+      } else if (choice === "ed727858-2c94-41fd-b55e-87e69264b448") { // Leave Team
+        if (user.isTeam) {
+          const teamRef = ref(database, "teams/" + user.teamID);
+          const teamSnapshot = await get(teamRef);
+          let teamMembers = teamSnapshot.val() || [];
+          teamMembers = teamMembers.filter(id => id !== personalKey);
+          await set(teamRef, teamMembers);
+
+          await update(userRef, { isTeam: false, teamID: null });
+          await sendEmailHtml(userEmail, "You've left your team", "teamLeave", emailData);
+        } else {
+          console.log("User is not part of any team.");
+        }
+
+      } else { // Create My Own Team
+        // Remove from old team if exists
         if (user.isTeam) {
           const oldTeamRef = ref(database, "teams/" + user.teamID);
           const oldTeamSnapshot = await get(oldTeamRef);
@@ -165,60 +211,19 @@ app.post('/modifyApplication', async (req, res) => {
           await set(oldTeamRef, oldTeamMembers);
         }
 
-        // Add to new team
-        let teamMembers = teamSnapshot.val() || [];
-        teamMembers.push(personalKey);
-        await set(targetTeamRef, teamMembers);
+        // Create a new team
+        let newTeamID = push(child(ref(database), "teams")).key;
+        await set(ref(database, "teams/" + newTeamID), [personalKey]);
 
         // Update user data
-        await update(userRef, { isTeam: true, teamID: targetTeamID });
+        await update(userRef, { isTeam: true, teamID: newTeamID });
         
-        // Confirmation email
-        emailData.teamCode = targetTeamID;
-        await sendEmailHtml(userEmail, "You've successfully joined a new team!", "teamJoin(Change)", emailData);
-
-      } else {
-        await sendEmailHtml(userEmail, "Error joining team", "teamChangeError", emailData);
-        console.log("Error joining team");
+        // Send new team code email
+        emailData.teamCode = newTeamID;
+        await sendEmailHtml(userEmail, "Your new team has been created!", "teamCreate(Change)", emailData);
       }
-
-    } else if (choice === "ed727858-2c94-41fd-b55e-87e69264b448") { // Leave Team
-      if (user.isTeam) {
-        const teamRef = ref(database, "teams/" + user.teamID);
-        const teamSnapshot = await get(teamRef);
-        let teamMembers = teamSnapshot.val() || [];
-        teamMembers = teamMembers.filter(id => id !== personalKey);
-        await set(teamRef, teamMembers);
-
-        await update(userRef, { isTeam: false, teamID: null });
-        await sendEmailHtml(userEmail, "You've left your team", "teamLeave", emailData);
-      } else {
-        
-        console.log("User is not part of any team.");
-      }
-
-    } else { // Create My Own Team
-      // Remove from old team if exists
-      if (user.isTeam) {
-        const oldTeamRef = ref(database, "teams/" + user.teamID);
-        const oldTeamSnapshot = await get(oldTeamRef);
-        let oldTeamMembers = oldTeamSnapshot.val() || [];
-        oldTeamMembers = oldTeamMembers.filter(id => id !== personalKey);
-        await set(oldTeamRef, oldTeamMembers);
-      }
-
-      // Create a new team
-      let newTeamID = push(child(ref(database), "teams")).key;
-      await set(ref(database, "teams/" + newTeamID), [personalKey]);
-
-      // Update user data
-      await update(userRef, { isTeam: true, teamID: newTeamID });
-      
-      // Send new team code email
-      emailData.teamCode = newTeamID;
-      await sendEmailHtml(userEmail, "Your new team has been created!", "teamCreate(Change)", emailData);
     }
-
+    
     res.status(200).send("Team preferences updated successfully.");
   } catch (err) {
     console.log(err);
