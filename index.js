@@ -153,6 +153,7 @@ app.post('/modifyApplication', async (req, res) => {
 
         if (user.isTeam && user.teamID === targetTeamID) {
           // User is already in the target team
+          emailData.teamCode = targetTeamID;
           await sendEmailHtml(userEmail, "You've successfully joined a new team!", "teamJoin(Change)", emailData);
           console.log("User is already in the target team.");
         } else {
