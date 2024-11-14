@@ -27,7 +27,10 @@ const teamHandler = async (response, key) => {
     teamSlots.push(key);
     let teamKey = push(child(ref(database), "teams")).key;
     await set(ref(database, "teams/" + teamKey), teamSlots);
-    
+    console.log("User wants to create a team")
+    console.log("Key: " + teamKey)
+   
+
 
     
     emailData.teamCode = teamKey
@@ -150,6 +153,7 @@ app.post('/modifyApplication', async (req, res) => {
 
       if (choice === "71da61d4-5eb5-46e9-8e46-f17ee72e264f") { // Join Team
         const targetTeamID = content.data.fields[2].value;
+        console.log("User wants to join a team (Teamchangeform)")
 
         if (user.isTeam && user.teamID === targetTeamID) {
           // User is already in the target team
@@ -162,7 +166,9 @@ app.post('/modifyApplication', async (req, res) => {
           
           if (teamSnapshot.exists() && teamSnapshot.val().length < 4) {
             // Remove from old team if they have one
+            
             if (user.isTeam) {
+              console.log("Removing from old team")
               const oldTeamRef = ref(database, "teams/" + user.teamID);
               const oldTeamSnapshot = await get(oldTeamRef);
               let oldTeamMembers = oldTeamSnapshot.val() || [];
@@ -171,6 +177,8 @@ app.post('/modifyApplication', async (req, res) => {
             }
 
             // Add to new team
+            console.log("Adding to new team")
+            console.log(targetTeamID)
             let teamMembers = teamSnapshot.val() || [];
             teamMembers.push(personalKey);
             await set(targetTeamRef, teamMembers);
@@ -190,12 +198,13 @@ app.post('/modifyApplication', async (req, res) => {
 
       } else if (choice === "ed727858-2c94-41fd-b55e-87e69264b448") { // Leave Team
         if (user.isTeam) {
+          console.log("User wants to leave team")
           const teamRef = ref(database, "teams/" + user.teamID);
           const teamSnapshot = await get(teamRef);
           let teamMembers = teamSnapshot.val() || [];
           teamMembers = teamMembers.filter(id => id !== personalKey);
           await set(teamRef, teamMembers);
-
+          67
           await update(userRef, { isTeam: false, teamID: null });
           await sendEmailHtml(userEmail, "You've left your team", "teamLeave", emailData);
         } else {
@@ -203,19 +212,22 @@ app.post('/modifyApplication', async (req, res) => {
         }
 
       } else { // Create My Own Team
+        console.log("User wants to create new team")
         // Remove from old team if exists
         if (user.isTeam) {
+          console.log("Removing user from old team")
           const oldTeamRef = ref(database, "teams/" + user.teamID);
           const oldTeamSnapshot = await get(oldTeamRef);
           let oldTeamMembers = oldTeamSnapshot.val() || [];
           oldTeamMembers = oldTeamMembers.filter(id => id !== personalKey);
           await set(oldTeamRef, oldTeamMembers);
         }
-
+        
+        console.log("Creating new team")
         // Create a new team
         let newTeamID = push(child(ref(database), "teams")).key;
         await set(ref(database, "teams/" + newTeamID), [personalKey]);
-
+        console.log("TeamID: " + newTeamID)
         // Update user data
         await update(userRef, { isTeam: true, teamID: newTeamID });
         
