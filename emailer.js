@@ -82,7 +82,7 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent: " + info.response);
 
-    // ✅ Delete the QR code file after sending
+
     fs.unlink(TEMP_QR_PATH, (err) => {
       if (err) console.error("Failed to delete temp QR file:", err);
     });
