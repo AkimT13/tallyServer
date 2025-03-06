@@ -3,9 +3,14 @@ import { database } from "./config.js";
 import { set, ref, push, update, child, get } from "firebase/database";
 import { sendEmailHtml } from "./emailer.js";
 import bodyParser from "body-parser";
+import QRCode from "qrcode"
+import { generateQRCode } from "./qrCodeGenerator.js";
+import cors from "cors"
 
 const app = new express();
 app.use(express.json({limit:'10mb'}));
+
+app.use(cors());
 
 
 const formatData = (data) => {};
@@ -276,27 +281,33 @@ app.post('/rawJSONView', async (req,res)=>{ //replace a tally form with this rou
 })
 
 
-app.post("/sendQRCODE", async (req,res)=>{
-  try{
+app.post("/generate-qrcodes", async (req,res)=>{
 
-    let data = req.body;
-    let queue = []
-    for(let val in data){
-      
+  const users = req.body.users; // List of { key, email }
+
+  if (!users || !Array.isArray(users)) {
+    return res.status(400).json({ error: "Invalid request format" });
+  }
+
+  const results = [];
+
+  for (const { key, email } of users) {
+    const qrCode = await generateQRCode(key);
+    if (!qrCode) {
+      results.push({ key, emailSucceeded: false });
+      continue;
     }
-    const userRef = ref(database, `/responses/${key}`)
-    const userData = await get(userRef);
-    const email = userData.data.fields[7].value;
-    
 
 
-
-    
+    const emailSucceeded = await sendEmailHtml(email,"SF Hacks","qrCode",qrCode);
+    results.push({ key, emailSucceeded });
   }
-  catch(err){
+
+  res.json(results);
+  
+  
     
-    res.status(500).send("Error with route: " + err)
-  }
+    
 })
 
 function simplify(tallyContent) {
