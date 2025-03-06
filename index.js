@@ -275,6 +275,30 @@ app.post('/rawJSONView', async (req,res)=>{ //replace a tally form with this rou
     
 })
 
+
+app.post("/sendQRCODE", async (req,res)=>{
+  try{
+
+    let data = req.body;
+    let queue = []
+    for(let val in data){
+      
+    }
+    const userRef = ref(database, `/responses/${key}`)
+    const userData = await get(userRef);
+    const email = userData.data.fields[7].value;
+    
+
+
+
+    
+  }
+  catch(err){
+    
+    res.status(500).send("Error with route: " + err)
+  }
+})
+
 function simplify(tallyContent) {
   const tallyFormEntries = tallyContent.data.fields;
   const output = {};
@@ -285,6 +309,8 @@ function simplify(tallyContent) {
 
   return output;
 }
+
+
 
 app.listen(3000, () => {
   console.log("The server is running on port 3000");
