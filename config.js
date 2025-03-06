@@ -54,7 +54,7 @@ const clearDb = ()=>{ // if you run this function it will fucking delete everyth
   
 }
 
-write("STest" , "123245")
+
 
 
 
