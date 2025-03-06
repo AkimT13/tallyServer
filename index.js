@@ -299,7 +299,7 @@ app.post("/generate-qrcodes", async (req,res)=>{
     }
 
 
-    const emailSucceeded = await sendEmailHtml(email,"SF Hacks","qrCode",qrCode);
+    const emailSucceeded = await sendEmailHtml(email,"SF Hacks","qrCode",{qrCode});
     results.push({ key, emailSucceeded });
   }
 
