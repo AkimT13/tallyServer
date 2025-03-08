@@ -55,26 +55,7 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
           path: TEMP_QR_PATH, // Attach the generated QR code file
           cid: "qrcode_cid",
         },
-        {
-          filename: "sfhackslogo.png",
-          path: path.join(__dirname, "/templates/images/sfhackslogo.png"),
-          cid: "sfhackslogo",
-        },
-        {
-          filename: "discord.png",
-          path: path.join(__dirname, "/templates/images/discord.png"),
-          cid: "discordlogo",
-        },
-        {
-          filename: "instagram.png",
-          path: path.join(__dirname, "/templates/images/instagram.png"),
-          cid: "instagramlogo",
-        },
-        {
-          filename: "solo.png",
-          path: path.join(__dirname, "/templates/images/solo.png"),
-          cid: "solologo",
-        },
+        
       ],
     };
 

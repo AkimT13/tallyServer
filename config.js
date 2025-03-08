@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config()
-const key = process.env.DEV_ADMIN_INFO
+const key = process.env.ADMIN_INFO
 const serviceAccount = JSON.parse(Buffer.from(key,'base64').toString('utf-8'))
 
 admin.initializeApp({
