@@ -3,9 +3,14 @@ import { database } from "./config.js";
 import { set, ref, push, update, child, get } from "firebase/database";
 import { sendEmailHtml } from "./emailer.js";
 import bodyParser from "body-parser";
+import QRCode from "qrcode"
+import { generateQRCode } from "./qrCodeGenerator.js";
+import cors from "cors"
 
 const app = new express();
 app.use(express.json({limit:'10mb'}));
+
+app.use(cors());
 
 
 const formatData = (data) => {};
@@ -275,6 +280,36 @@ app.post('/rawJSONView', async (req,res)=>{ //replace a tally form with this rou
     
 })
 
+
+app.post("/generate-qrcodes", async (req,res)=>{
+
+  const users = req.body.users; // List of { key, email }
+
+  if (!users || !Array.isArray(users)) {
+    return res.status(400).json({ error: "Invalid request format" });
+  }
+
+  const results = [];
+
+  for (const { key, email } of users) {
+    const qrCode = await generateQRCode(key);
+    if (!qrCode) {
+      results.push({ key, emailSucceeded: false });
+      continue;
+    }
+
+    
+    const emailSucceeded = await sendEmailHtml(email,"You've been accepted to sfhacks","qrCode",{qrCode});
+    results.push({ key, emailSucceeded });
+  }
+
+  res.json(results);
+  
+  
+    
+    
+})
+
 function simplify(tallyContent) {
   const tallyFormEntries = tallyContent.data.fields;
   const output = {};
@@ -285,6 +320,8 @@ function simplify(tallyContent) {
 
   return output;
 }
+
+
 
 app.listen(3000, () => {
   console.log("The server is running on port 3000");
