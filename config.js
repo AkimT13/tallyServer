@@ -12,7 +12,7 @@ const serviceAccount = JSON.parse(Buffer.from(key,'base64').toString('utf-8'))
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://sfhacks2025dev-default-rtdb.firebaseio.com"
+  databaseURL: "https://sfhacks2025-default-rtdb.firebaseio.com"
 });
 const database = admin.database();
 
