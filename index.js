@@ -310,6 +310,42 @@ app.post("/generate-qrcodes", async (req,res)=>{
     
 })
 
+app.post("/sendQRcodeLink", async (req, res) => {
+  const users = req.body.users; // List of { key, email }
+
+  if (!users || !Array.isArray(users)) {
+    return res.status(400).json({ error: "Invalid request format" });
+  }
+
+  const results = [];
+
+  for (const { key, email } of users) {
+    if (!key || !email) {
+      results.push({ key, emailSucceeded: false, error: "Missing key or email" });
+      continue;
+    }
+
+    // Generate the link to the QR Code page
+    const qrCodeLink = `https://sfhacks.io/checkIn/${key}`;
+
+    // Prepare email data
+    const emailData = { qrCodeLink };
+
+    // Send the email with the link
+    const emailSucceeded = await sendEmailHtml(
+      email,
+      "Your SF Hacks Check-in QR Code",
+      "qrCodeLinkTemplate", // Email template should display the link
+      emailData
+    );
+
+    results.push({ key, emailSucceeded });
+  }
+
+  res.json(results);
+});
+
+
 function simplify(tallyContent) {
   const tallyFormEntries = tallyContent.data.fields;
   const output = {};
