@@ -298,6 +298,7 @@ app.post("/generate-qrcodes", async (req,res)=>{
       continue;
     }
 
+    console.log(`"Attempting to send email: ${email}`)
     
     const emailSucceeded = await sendEmailHtml(email,"You've been accepted to sfhacks","qrCode",{qrCode});
     results.push({ key, emailSucceeded });
@@ -330,7 +331,7 @@ app.post("/sendQRcodeLink", async (req, res) => {
 
     // Prepare email data
     const emailData = { qrCodeLink };
-
+    console.log(`Attempting to send email to: ${email}`)
     // Send the email with the link
     const emailSucceeded = await sendEmailHtml(
       email,
@@ -338,6 +339,13 @@ app.post("/sendQRcodeLink", async (req, res) => {
       "qrCodeLinkTemplate", // Email template should display the link
       emailData
     );
+    if(emailSucceeded){
+      console.log("Email Succeeded");
+    }
+    else{
+      console.log("email failed");
+    }
+
 
     results.push({ key, emailSucceeded });
   }

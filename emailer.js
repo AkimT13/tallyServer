@@ -14,7 +14,6 @@ const __dirname = dirname(__filename);
 
 const TEMP_QR_PATH = path.join(__dirname, "temp-qrcode.png"); // Single temp QR code file
 
-
 export async function sendEmailHtml(recipientEmail, subject, templateName, data) {
   try {
     const transporter = nodemailer.createTransport({
@@ -49,7 +48,7 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
     };
 
     let shouldDeleteTempQR = false;
-    if (templateName === "qrCodeLinkTemplate" && fs.existsSync(TEMP_QR_PATH)) {
+    if (templateName === "qrCode" && fs.existsSync(TEMP_QR_PATH)) {
       mailOptions.attachments = [
         {
           filename: "qrcode.png",
