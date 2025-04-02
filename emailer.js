@@ -30,7 +30,7 @@ export async function sendEmailHtml(recipientEmail, subject, templateName, data)
         privateKey: process.env.DKIM_PRIVATE_KEY,
       },
     });
-
+    //bruh
     const templatePath = path.join(__dirname, `/templates/${templateName}.hbs`);
     const source = fs.readFileSync(templatePath, "utf8");
 
