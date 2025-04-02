@@ -373,8 +373,8 @@ app.post("/sendWaitList", async (req,res)=>{
       const succeeded = await sendEmailHtml(
         email,
         "You're on the SF Hacks Waitlist",
-        "waitlistTemplate", // Your waitlist .hbs file name
-        { userEmail: email } // You can expand this object with more data if needed
+        "waitListTemplate", 
+        { userEmail: email } 
       );
 
       results.push({ key, emailSucceeded: succeeded });
