@@ -369,6 +369,8 @@ app.post("/sendWaitList", async (req,res)=>{
       continue;
     }
 
+    console.log(`Attempting to send waitlist email: ${email} `);
+
     try {
       const succeeded = await sendEmailHtml(
         email,
