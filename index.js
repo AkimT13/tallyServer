@@ -353,6 +353,42 @@ app.post("/sendQRcodeLink", async (req, res) => {
   res.json(results);
 });
 
+app.post("/sendWaitList", async (req,res)=>{
+
+  const { users } = req.body;
+
+  if (!users || !Array.isArray(users)) {
+    return res.status(400).json({ message: "Invalid users data" });
+  }
+
+  const results = [];
+
+  for (const { key, email } of users) {
+    if (!email) {
+      results.push({ key, emailSucceeded: false, reason: "Missing email" });
+      continue;
+    }
+
+    try {
+      const succeeded = await sendEmailHtml(
+        email,
+        "You're on the SF Hacks Waitlist",
+        "waitlistTemplate", // Your waitlist .hbs file name
+        { userEmail: email } // You can expand this object with more data if needed
+      );
+
+      results.push({ key, emailSucceeded: succeeded });
+    } catch (err) {
+      results.push({ key, emailSucceeded: false, reason: err.message });
+    }
+  }
+
+  res.json(results);
+
+
+
+})
+
 
 function simplify(tallyContent) {
   const tallyFormEntries = tallyContent.data.fields;
