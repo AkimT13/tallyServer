@@ -328,10 +328,11 @@ app.post("/sendQRcodeLink", async (req, res) => {
 
     // Generate the link to the QR Code page
     const qrCodeLink = `https://sfhacks.io/checkIn/${key}`;
-
+    
     // Prepare email data
     const emailData = { qrCodeLink };
-    console.log(`Attempting to send email to: ${email}`)
+    console.log(`Attempting to send email to: ${email}`);
+    console.log(`Link: ${qrCodeLink}`);
     // Send the email with the link
     const emailSucceeded = await sendEmailHtml(
       email,
