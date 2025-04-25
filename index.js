@@ -392,6 +392,41 @@ app.post("/sendWaitList", async (req,res)=>{
 
 })
 
+app.post("/sendQuestionare", async (req, res) => {
+  const { users } = req.body;
+
+  if (!users || !Array.isArray(users)) {
+    return res.status(400).json({ message: "Invalid users data" });
+  }
+
+  const results = [];
+
+  for (const { key, email } of users) {
+    if (!email) {
+      results.push({ key, emailSucceeded: false, reason: "Missing email" });
+      continue;
+    }
+
+    console.log(`Attempting to send questionnaire email: ${email}`);
+
+    try {
+      const succeeded = await sendEmailHtml(
+        email,
+        "Share Your Feedback - SF Hacks 2025",
+        "questionare", 
+        {} 
+      );
+
+      results.push({ key, emailSucceeded: succeeded });
+    } catch (err) {
+      results.push({ key, emailSucceeded: false, reason: err.message });
+    }
+  }
+
+  res.json(results);
+});
+
+
 
 function simplify(tallyContent) {
   const tallyFormEntries = tallyContent.data.fields;
